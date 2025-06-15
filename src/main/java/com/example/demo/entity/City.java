@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "cities")
 public class City {
     @Id
-    private long id;
+    private ObjectId id;
     private String name;
     private Region region;
 }
