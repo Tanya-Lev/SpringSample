@@ -1,42 +1,46 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.request.CreateCountryRequest;
-import com.example.demo.dto.response.CountryResponse;
-import com.example.demo.dto.response.GetCountryByIdResponse;
+import com.example.demo.dto.request.CreateCityRequest;
+import com.example.demo.dto.response.CityResponse;
+import com.example.demo.dto.response.GetAllCityByRegionResponse;
 import com.example.demo.service.CityService;
-import com.example.demo.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/city")
 public class CityController {
-    @RestController
-    @RequestMapping("/city")
-    public class CountryController {
-        @Autowired
-        private CityService cityService;
 
-        @PostMapping("/create")
-        public CountryResponse createCountryFromController(@RequestBody CreateCountryRequest request) {
-            CountryResponse response = cityService.createCountry(request);
-            return response;
-        }
+    @Autowired
+    private CityService cityService;
 
-//        @GetMapping()
-//        public GetCityById getCityById(@RequestParam(name = "id") String id){
-//            return cityService.getCityById(id);
-//        }
-
-        @GetMapping("/readAll")
-        public List<CountryResponse> getAllCountry(){
-            return cityService.getAllCountry();
-        }
-
-        @DeleteMapping("/delete")
-        public boolean deleteCityById(@RequestParam(name = "id") String id){
-            return cityService.deleteCityById(id);
-        }
-
+    @PostMapping("/create")
+    public CityResponse createCity(@RequestBody CreateCityRequest request) {
+        CityResponse response = cityService.createCity(request);
+        return response;
     }
+
+    @GetMapping()
+    public CityResponse getCityById(@RequestParam(name = "id") String id) {
+        return cityService.GetCityById(id);
+    }
+
+    @GetMapping("/readAll")
+    public List<GetAllCityByRegionResponse> getAllCityByRegion(String id) {
+        return cityService.getAllCityByRegion(id);
+    }
+
+    @GetMapping("/readAllByRegion")
+    public List<CityResponse> getAllCity() {
+        return cityService.getAllCity();
+    }
+
+    @DeleteMapping("/delete")
+    public boolean deleteCityById(@RequestParam(name = "id") String id) {
+        return cityService.deleteCityById(id);
+    }
+
 }
+

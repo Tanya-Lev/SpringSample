@@ -9,7 +9,8 @@ public record GetAllRegionByCountryResponse(
         @Schema(example = "1")
         @NotNull
         String id,
-        @Schema(example = "Rostov region")
+
+        @Schema(example = "Ростовская область")
         @NotNull
         String name
 ) {

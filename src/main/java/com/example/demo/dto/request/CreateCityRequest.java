@@ -3,14 +3,17 @@ package com.example.demo.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
-public record CreateRegionRequest(
+public record CreateCityRequest(
         @Schema(example = "Ростовская область")
         @NotNull
         String name,
 
         @Schema(example = "1")
         @NotNull
-        String countryId
+        String regionId,
 
+        @Schema(example = "1")
+        @NotNull
+        String countryId
 ) {
 }

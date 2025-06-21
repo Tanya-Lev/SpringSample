@@ -28,7 +28,8 @@ public class CountryServiceImpl implements CountryService {
         Country savedCountry = countryRepository.save(country);//Сохраняем страну в базу данных. Репозиторий возвращает объект Country с уже установленным id
 
         //CountryResponse CountryResponse = new CountryResponse(savedCountry.getId().toString(), savedCountry.getName());
-        return CountryMapper.toCountryResponse(savedCountry);//Собираем DTO-ответ. Он содержит id и name, и его мы потом отправим клиенту.
+        //Собираем DTO-ответ. Он содержит id и name, и его мы потом отправим клиенту.
+        return CountryMapper.toCountryResponse(savedCountry);
     }
 
     @Override

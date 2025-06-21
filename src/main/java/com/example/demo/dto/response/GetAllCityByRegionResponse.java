@@ -3,16 +3,16 @@ package com.example.demo.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
-public record RegionResponse(
+public record GetAllCityByRegionResponse(
         @Schema(example = "1")
         @NotNull
         String id,
 
-        @Schema(example = "Ростовская область")
+        @Schema(example = "Макеевка")
         @NotNull
-        String name,
+        String cityName,
 
-        @Schema(example = "Россия")
+        @Schema(example = "Москва")
         @NotNull
         String countryName
 ) {

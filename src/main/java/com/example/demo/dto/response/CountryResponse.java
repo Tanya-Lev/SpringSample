@@ -7,7 +7,8 @@ import jakarta.validation.constraints.NotNull;
             @Schema(example = "1")
             @NotNull
             String id,
-            @Schema(example = "Russia")
+
+            @Schema(example = "Россия")
             @NotNull
             String name
     ) {

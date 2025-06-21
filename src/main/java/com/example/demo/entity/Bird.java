@@ -13,6 +13,9 @@ public class Bird {
     @Id
     private ObjectId id;
     private String name;
+    private String description;
+    private List<City> origin;
+    private List<String> tags;
 
     public ObjectId getId() {
         return id;
@@ -54,7 +57,4 @@ public class Bird {
         this.tags = tags;
     }
 
-    private String description;
-    private List<City> origin;
-    private List<String> tags;
 }

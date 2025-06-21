@@ -5,7 +5,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotNull;
 
 public record CreateCountryRequest(
-        @Schema(example = "Russia")
+        @Schema(example = "Россия")
         @NotNull
         String name
 ) {

@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -11,6 +12,7 @@ public class Region {
     @Id
     private ObjectId id;
     private String name;
+    @DBRef
     private Country country;
 
     public ObjectId getId() {

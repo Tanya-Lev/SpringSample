@@ -22,15 +22,21 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public RegionResponse createRegion(CreateRegionRequest request) {
-        final Region region = new Region();
-        region.setName(request.name());
         Country country = countryRepository.findById(request.countryId()).get();
-        region.setCountry(country);
 
+        //Создаём регион и устанавливаем имя и страну
+        Region region = new Region();
+        region.setName(request.name());
+        region.setCountry(country); // устанавливаем объект, он сохранится как ссылка
+
+        //Сохраняем регион
         Region savedRegion = regionRepository.save(region);
 
-        RegionResponse createRegionResponse = new RegionResponse(savedRegion.getId().toString(), savedRegion.getName(), savedRegion.getCountry().getName());
-        return createRegionResponse;
+        return new RegionResponse(
+                savedRegion.getId().toString(),
+                savedRegion.getName(),
+                savedRegion.getCountry().getName() // страна будет загружена из @DBRef
+        );
     }
 
     @Override
@@ -42,7 +48,7 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public List<GetAllRegionByCountryResponse> getAllRegionByCountry(String id) {
-        List<Region> regions = regionRepository.findAllByCountry_Id(id);
+        List<Region> regions = regionRepository. findAllByCountry_Id(id);
         List<GetAllRegionByCountryResponse> responseList = new ArrayList<>();
         for (Region region : regions) {
             GetAllRegionByCountryResponse getAllRegionByCountryResponse = new GetAllRegionByCountryResponse(

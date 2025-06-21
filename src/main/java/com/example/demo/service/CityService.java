@@ -1,20 +1,22 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.request.CreateCountryRequest;
-import com.example.demo.dto.response.CountryResponse;
-import com.example.demo.dto.response.GetCountryByIdResponse;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.example.demo.dto.request.CreateCityRequest;
+import com.example.demo.dto.response.*;
 
 import java.util.List;
 
 public interface CityService {
 
-    public CountryResponse createCountry(CreateCountryRequest request);
-//    public GetCityByIdResponse GetCityById(String id);
-    public List<CountryResponse> getAllCountry();
+    public CityResponse createCity(CreateCityRequest request);
+    public CityResponse GetCityById(String id);
+    public List<GetAllCityByRegionResponse> getAllCityByRegion(String id);
+    public List<CityResponse> getAllCity();
     public boolean deleteCityById(String id);
+
+
+
+
+
 
 
 
