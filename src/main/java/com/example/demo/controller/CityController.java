@@ -27,12 +27,12 @@ public class CityController {
         return cityService.GetCityById(id);
     }
 
-    @GetMapping("/readAll")
+    @GetMapping("/readAllByRegion")
     public List<GetAllCityByRegionResponse> getAllCityByRegion(String id) {
         return cityService.getAllCityByRegion(id);
     }
 
-    @GetMapping("/readAllByRegion")
+    @GetMapping("/readAll")
     public List<CityResponse> getAllCity() {
         return cityService.getAllCity();
     }

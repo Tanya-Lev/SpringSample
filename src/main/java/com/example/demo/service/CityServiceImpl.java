@@ -11,6 +11,7 @@ import com.example.demo.entity.Region;
 import com.example.demo.repository.CityRepository;
 import com.example.demo.repository.CountryRepository;
 import com.example.demo.repository.RegionRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +21,27 @@ import java.util.List;
 @Service
 public class CityServiceImpl implements CityService {
     @Autowired
+    private CountryRepository countryRepository;
+    @Autowired
     private RegionRepository regionRepository;
     @Autowired
     private CityRepository cityRepository;
 
     @Override
     public CityResponse createCity(CreateCityRequest request) {//Это метод, который получает DTO-запрос (входные данные от пользователя) и возвращает DTO-ответ после создания страны.
-        final City city = new City();//Создаём новую сущность города, которую будем сохранять в базу.
-        Region region = regionRepository.findById(request.regionId()).get();//Извлекаю регион из базы данных по regionId, который пришёл в запросе.
+        //Создаём новую сущность города, которую будем сохранять в базу.
+        final City city = new City();
 
-        city.setName(request.name());//Устанавливаем имя города из полученного запроса, мы берём его name().
-        city.setRegion(region);//Привязываю регион к городу.
-        City savedCity = cityRepository.save(city);//Сохраняю город в MongoDB. После этого savedCity будет содержать уже сгенерированный ID.
+        //Извлекаю регион из базы данных по regionId, который пришёл в запросе.
+        Region region = regionRepository.findById(request.regionId()).get();
+        Country country = countryRepository.findById(request.countryId()).get();
+
+        //Устанавливаем имя города из полученного запроса, мы берём его name().
+        city.setName(request.name());
+        city.setRegion(region);
+
+        //Сохраняю город в MongoDB. После этого savedCity будет содержать уже сгенерированный ID.
+        City savedCity = cityRepository.save(city);
 
         CityResponse createCityResponse = new CityResponse(
                 savedCity.getId().toString(),
@@ -59,7 +69,8 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public List<GetAllCityByRegionResponse> getAllCityByRegion(String id) {
-        List<City> cities = cityRepository.findAllByRegion_Id(id);
+        ObjectId regionObjectId = new ObjectId(id);
+        List<City> cities = cityRepository.findAllByRegionId(regionObjectId);
         List<GetAllCityByRegionResponse> responseList = new ArrayList<>();
 
         for (City city : cities){

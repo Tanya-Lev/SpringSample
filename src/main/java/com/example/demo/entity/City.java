@@ -3,7 +3,6 @@ package com.example.demo.entity;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -12,8 +11,7 @@ public class City {
     @Id
     private ObjectId id;
     private String name;
-    @DBRef
-    private Region region;
+    private ObjectId regionId;
 
     public ObjectId getId() {
         return id;
@@ -31,11 +29,11 @@ public class City {
         this.name = name;
     }
 
-    public Region getRegion() {
-        return region;
+    public ObjectId getRegionId() {
+        return regionId;
     }
 
-    public void setRegion(Region region) {
-        this.region = region;
+    public void setRegionId(ObjectId regionId) {
+        this.regionId = regionId;
     }
 }

@@ -7,11 +7,15 @@ import com.example.demo.entity.Country;
 import com.example.demo.entity.Region;
 import com.example.demo.repository.CountryRepository;
 import com.example.demo.repository.RegionRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RegionServiceImpl implements RegionService {
@@ -27,7 +31,7 @@ public class RegionServiceImpl implements RegionService {
         //Создаём регион и устанавливаем имя и страну
         Region region = new Region();
         region.setName(request.name());
-        region.setCountry(country); // устанавливаем объект, он сохранится как ссылка
+        region.setCountryId(country.getId());
 
         //Сохраняем регион
         Region savedRegion = regionRepository.save(region);
@@ -35,20 +39,27 @@ public class RegionServiceImpl implements RegionService {
         return new RegionResponse(
                 savedRegion.getId().toString(),
                 savedRegion.getName(),
-                savedRegion.getCountry().getName() // страна будет загружена из @DBRef
+                country.getName()
         );
     }
 
     @Override
     public RegionResponse getRegionById(String id) {
         Region region = regionRepository.findById(id).get();
-        RegionResponse getRegionByIdResponse = new RegionResponse(region.getId().toString(), region.getName(), region.getCountry().getName());
+
+        String countryId = region.getCountryId().toString();
+        Country country = countryRepository.findById(countryId).get();
+        //Country country = countryRepository.findById(region.getCountryId().toString()).get(); в одну строку
+
+        RegionResponse getRegionByIdResponse = new RegionResponse(region.getId().toString(), region.getName(), country.getName());
         return getRegionByIdResponse;
     }
 
     @Override
     public List<GetAllRegionByCountryResponse> getAllRegionByCountry(String id) {
-        List<Region> regions = regionRepository. findAllByCountry_Id(id);
+        ObjectId countryObjectId = new ObjectId(id);
+
+        List<Region> regions = regionRepository.findAllByCountryId(countryObjectId);
         List<GetAllRegionByCountryResponse> responseList = new ArrayList<>();
         for (Region region : regions) {
             GetAllRegionByCountryResponse getAllRegionByCountryResponse = new GetAllRegionByCountryResponse(
@@ -63,16 +74,26 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public List<RegionResponse> getAllRegion() {
         List<Region> regions = regionRepository.findAll();
-        List<RegionResponse> responseList = new ArrayList<>();
-        for (Region region : regions) {
-            RegionResponse regionResponse = new RegionResponse(
-                    region.getId().toString(),
-                    region.getName(),
-                    region.getCountry().getName()
-            );
-            responseList.add(regionResponse);
-        }
-        return responseList;
+
+        Set<String> countryIds = regions.stream()
+                .map(Region::getCountryId)
+                .map(ObjectId::toString)
+                .collect(Collectors.toSet());
+
+        List<Country> countries = countryRepository.findAllById(countryIds);
+        Map<ObjectId, Country> countryMap = countries.stream()
+                .collect(Collectors.toMap(Country::getId, c -> c));
+
+        return regions.stream()
+                .map(region -> {
+                    Country country = countryMap.get(region.getCountryId());
+                    return new RegionResponse(
+                            region.getId().toString(),
+                            region.getName(),
+                            country != null ? country.getName() : "Unknown"
+                    );
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
